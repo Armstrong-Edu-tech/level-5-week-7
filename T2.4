@@ -1,0 +1,26 @@
+import React from 'react';
+import './App.css'
+
+import {nanoid} from 'nanoid';
+
+
+const products = [
+  { id: nanoid(), name: 'Laptop' },
+  { id: nanoid(), name: 'Phone' },
+  { id: nanoid(), name: 'Tablet' },
+];
+
+function ProductList(){
+  return(
+    <div>
+      <h1>Product List:</h1>
+      <ul>
+        {products.map(product=>(
+          <li key={product.id}>{product.name}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+export default ProductList;
