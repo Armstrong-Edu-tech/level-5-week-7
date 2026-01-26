@@ -1,0 +1,39 @@
+import React from 'react';
+import './App.css'
+
+function ItemList({items}){
+  return(
+    <div>
+      {items && items.length>0?(
+        <ul>
+          {items.map(item=>(
+            <li key={items.id}>{item.name}</li>
+          ))}
+        </ul>
+      ):(
+        <p>No data available</p>
+      )}
+    </div>
+  )
+}
+
+const sampleItems = [
+  { id: 1, name: 'Apple' },
+  { id: 2, name: 'Banana' },
+  { id: 3, name: 'Orange' },
+];
+
+
+
+function App() {
+  return (
+    <div>
+      <ItemList items={sampleItems} />
+      <ItemList items={[]}/>
+      
+
+    </div>
+  );
+}
+
+export default App;
