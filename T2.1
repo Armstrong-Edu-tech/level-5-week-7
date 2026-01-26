@@ -1,0 +1,48 @@
+import { useState } from "react";
+import './App.css'
+
+
+export default function BookApp() {
+const [books, setBooks] = useState([
+  { id: 1, title: "Clean Code", author: "Robert C. Martin" },
+  { id: 2, title: "You Don’t Know JS", author: "Kyle Simpson" },
+  { id: 3, title: "Design Patterns", author: "Erich Gamma" }
+]);
+
+
+
+  return (
+    <div>
+      <h1>Book List</h1>
+      {books.map(book=>(
+        <ul>
+          <li>
+            <strong>{book.title}-{book.author}</strong>
+          </li>
+        </ul>
+      ))
+      }
+
+      {books.map(book=>(
+        <ul>
+          <li key={book.id}>
+            <h2>{book.title}</h2>
+          </li>
+        </ul>
+      ))}
+
+
+   
+
+    </div>
+  );
+}
+
+
+
+
+
+
+
+
+
