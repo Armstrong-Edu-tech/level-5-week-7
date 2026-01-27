@@ -1,0 +1,30 @@
+import React, { useState } from "react";
+
+
+
+function App() {
+  const [selectedItem,setSelectedItem]=useState(null);
+  const items=["orange","mango","apple"]
+
+  const handleClick=(e)=>{
+    if(e.target.nodeName==='LI'){
+      setSelectedItem(e.target.textContent)
+    }
+  }
+
+ 
+
+
+return (
+    <ul onClick={handleClick}>
+      {items.map((item)=>(
+        <li>{item}</li>
+      ))}
+
+      {selectedItem && <p>SelectedItem:{selectedItem}</p>}
+    </ul>
+);
+
+}
+
+export default App;
