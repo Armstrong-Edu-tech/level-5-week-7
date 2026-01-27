@@ -1,0 +1,67 @@
+import React, { useState } from "react";
+
+
+const LoginButton = () => {
+  return (
+    <button
+      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+      onClick={() => alert("Login clicked")}
+    >
+      Login
+    </button>
+  );
+};
+
+const LogoutButton = () => {
+  return (
+    <button
+      className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+      onClick={() => alert("Logout clicked")}
+    >
+      Logout
+    </button>
+  );
+};
+
+const LoggedInComponent = () => {
+  return <p>Welcome back, user!</p>;
+};
+
+const LoggedOutComponent = () => {
+  return <p>Please log in to continue.</p>;
+};
+
+
+const ConditionalRenderingExample = ({ isLoggedIn }) => {
+    return(
+      <div>
+        {isLoggedIn?<LoggedInComponent />:<LoggedOutComponent />}
+      </div>
+    )
+};
+
+
+
+
+
+function AuthButton({ isLoggedIn }) {
+    return(
+      <div>
+        {isLoggedIn && <LogoutButton/>}
+        {!isLoggedIn&&<LoginButton />}
+      </div>
+    )
+}
+
+
+
+function App() {
+  return (
+    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center py-10">
+      <ConditionalRenderingExample isLoggedIn={false}/>
+      <AuthButton isLoggedIn={true}/>
+    </div>
+  );
+}
+
+export default App;
