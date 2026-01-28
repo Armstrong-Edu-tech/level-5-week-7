@@ -1,0 +1,45 @@
+import React, { useState } from "react";
+import { Formik, Form, Field } from "formik";
+
+function RegistrationForm() {
+  const [success, setSuccess] = useState(false);
+
+  return (
+    <Formik
+      initialValues={{ name: "", email: "" }}
+      onSubmit={(values, { resetForm, setSubmitting }) => {
+        setSuccess(false);
+        // Simulate API call
+        setTimeout(() => {
+          console.log("Submitted data:", values);
+          resetForm();         // Reset form fields
+          setSubmitting(false); // Stop isSubmitting state
+          setSuccess(true);    // Show success message
+        }, 1000);
+      }}
+    >
+      {({ isSubmitting }) => (
+        <Form>
+          <Field
+            name="name"
+            type="text"
+            placeholder="Name"
+            disabled={isSubmitting}
+          />
+          <Field
+            name="email"
+            type="email"
+            placeholder="Email"
+            disabled={isSubmitting}
+          />
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Register"}
+          </button>
+          {success && <p>Registration successful!</p>}
+        </Form>
+      )}
+    </Formik>
+  );
+}
+
+export default RegistrationForm;
