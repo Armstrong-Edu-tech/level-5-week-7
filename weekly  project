@@ -1,0 +1,183 @@
+
+
+import { useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+// Initial users
+const initialUsers = [
+  { id: 1, name: "Alice", email: "alice@example.com", role: "Admin" },
+  { id: 2, name: "Bob", email: "bob@example.com", role: "User" },
+];
+
+// Validation schema
+const UserSchema = Yup.object({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  role: Yup.string().required("Role is required"),
+});
+
+export default function App() {
+  const [users, setUsers] = useState(initialUsers);
+  const [editingUser, setEditingUser] = useState(null);
+
+  const initialValues = editingUser || {
+    name: "",
+    email: "",
+    role: "",
+  };
+
+  const handleSubmit = (values, { resetForm }) => {
+    if (editingUser) {
+      // Update user
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === editingUser.id ? { ...u, ...values } : u
+        )
+      );
+      setEditingUser(null);
+    } else {
+      // Add new user
+      setUsers((prev) => [
+        ...prev,
+        {
+          id: prev.length ? prev[prev.length - 1].id + 1 : 1,
+          ...values,
+        },
+      ]);
+    }
+    resetForm();
+  };
+
+  const handleDelete = (id) => {
+    setUsers(users.filter((u) => u.id !== id));
+    if (editingUser?.id === id) setEditingUser(null);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
+        <h1 className="text-2xl font-bold text-center mb-6">
+          Users Management
+        </h1>
+
+        {/* Form */}
+        <Formik
+          enableReinitialize
+          initialValues={initialValues}
+          validationSchema={UserSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ resetForm }) => (
+            <Form className="space-y-4 mb-8">
+              <div>
+                <Field
+                  name="name"
+                  placeholder="Name"
+                  className="w-full p-2 border rounded"
+                />
+                <ErrorMessage
+                  name="name"
+                  component="p"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+
+              <div>
+                <Field
+                  name="email"
+                  placeholder="Email"
+                  className="w-full p-2 border rounded"
+                />
+                <ErrorMessage
+                  name="email"
+                  component="p"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+
+              <div>
+                <Field
+                  as="select"
+                  name="role"
+                  className="w-full p-2 border rounded"
+                >
+                  <option value="">Select role</option>
+                  <option value="Admin">Admin</option>
+                  <option value="User">User</option>
+                  <option value="Manager">Manager</option>
+                </Field>
+                <ErrorMessage
+                  name="role"
+                  component="p"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="submit"
+                  className="flex-1 bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+                >
+                  {editingUser ? "Update User" : "Add User"}
+                </button>
+
+                {editingUser && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      resetForm();
+                      setEditingUser(null);
+                    }}
+                    className="flex-1 bg-gray-400 text-white py-2 rounded hover:bg-gray-500"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
+            </Form>
+          )}
+        </Formik>
+
+        {/* Users List */}
+        <div>
+          <h2 className="text-xl font-semibold mb-4">Users List</h2>
+
+          {users.length === 0 ? (
+            <p className="text-gray-500">No users found</p>
+          ) : (
+            users.map((user) => (
+              <div
+                key={user.id}
+                className="flex flex-col sm:flex-row sm:justify-between sm:items-center border p-3 mb-2 rounded"
+              >
+                <div>
+                  <p><strong>Name:</strong> {user.name}</p>
+                  <p><strong>Email:</strong> {user.email}</p>
+                  <p><strong>Role:</strong> {user.role}</p>
+                </div>
+
+                <div className="flex gap-2 mt-2 sm:mt-0">
+                  <button
+                    onClick={() => setEditingUser(user)}
+                    className="bg-yellow-400 px-3 py-1 rounded text-white"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(user.id)}
+                    className="bg-red-500 px-3 py-1 rounded text-white"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
