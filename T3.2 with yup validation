@@ -1,0 +1,23 @@
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+const schema = Yup.object({
+  email: Yup.string().email("Invalid email").required("Required"),
+});
+
+export default function SimpleForm() {
+  return (
+    <Formik
+      initialValues={{ email: "" }}
+      validationSchema={schema}
+      onSubmit={(values) => alert(JSON.stringify(values))}
+    >
+      <Form>
+        <Field name="email" placeholder="Email" />
+        <ErrorMessage name="email" component="div" style={{ color: "red" }} />
+        <button type="submit">Submit</button>
+      </Form>
+    </Formik>
+  );
+}
